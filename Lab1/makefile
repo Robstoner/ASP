@@ -16,4 +16,7 @@ gplot.o: gplot.c gplot.h
 	$(CC) $(CFLAGS) -c gplot.c
 
 clean:
-	rm -f vanderpol $(OBJECTS)
+	rm -f $(OBJECTS)
+
+cleanall:
+	rm -f $(OBJECTS) vanderpol

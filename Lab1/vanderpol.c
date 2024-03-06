@@ -14,8 +14,13 @@ double *func(double *x, int nr_items)
   return v;
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
+  if (argc != 2) {
+    printf("Usage: %s output_file_name\n", argv[0]);
+    return 1;
+  }
+
   int nr_items = 100;
   double *x = (double *)malloc(nr_items * sizeof(double));
   for (int i = 0; i < nr_items; i++)
@@ -28,7 +33,9 @@ int main()
   gplot_t *g = gplot_init();
 
   gplot_cmd(g, "set terminal png");
-  gplot_cmd(g, "set output 'vanderpol.png'");
+  char cmd[100];
+  sprintf(cmd, "set output '%s'", argv[1]);
+  gplot_cmd(g, cmd);
 
   gplot_title(g, "My function");
   gplot_xlabel(g, "x");
