@@ -32,4 +32,6 @@ void gplot_ylabel(gplot_t *g, char *ylabel);
 
 void gplot_plot(gplot_t *g, double *x, double *y, int n, char *style);
 
+void gplot_plot_dat(gplot_t *g, char *filename, char* style);
+
 #endif // GPLOT_H

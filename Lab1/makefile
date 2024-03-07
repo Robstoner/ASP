@@ -2,7 +2,16 @@
 CC = gcc
 CFLAGS = -Wall
 OBJECTS = vanderpol.o gplot.o
-LIBS = -lm
+OBJECTS2 = my_function.o gplot.o
+LIBS = -lm -lgsl -lgslcblas
+
+# all: my_function
+
+# my_function: $(OBJECTS2)
+# 	$(CC) $(CFLAGS) -o my_function $(OBJECTS2) $(LIBS)
+
+# my_function.o: my_function.c gplot.o	
+# 	$(CC) $(CFLAGS) -c my_function.c
 
 all: vanderpol
 
@@ -16,7 +25,7 @@ gplot.o: gplot.c gplot.h
 	$(CC) $(CFLAGS) -c gplot.c
 
 clean:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) $(OBJECTS2)
 
 cleanall:
-	rm -f $(OBJECTS) vanderpol
+	rm -f $(OBJECTS2) $(OBJECTS) vanderpol.dat vanderpol my_function

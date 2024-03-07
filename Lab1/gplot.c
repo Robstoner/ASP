@@ -56,3 +56,13 @@ void gplot_plot(gplot_t *g, double *x, double *y, int n, char *style)
   }
   fprintf(g->pipe, "e\n");
 }
+
+void gplot_plot_dat(gplot_t *g, char *filename, char *style) 
+{
+  g->plot_cmd[g->plot_count] = (char *)malloc(GPLOT_MAX_CMD);
+  sprintf(g->plot_cmd[g->plot_count], "plot '%s' using %s", filename, style);
+  gplot_cmd(g, g->plot_cmd[g->plot_count]);
+  g->plot_count++;
+
+  
+}
