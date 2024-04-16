@@ -32,12 +32,23 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
+    int N = count_lines("x.dat");
+    if (world_size % 2 != 0)
+    {
+        printf("Number of processes is not even\n");
+        return 1;
+    }
+    if ((N % (world_size / 2)) != 0)
+    {
+        printf("N is not divisible by half of world_size\n");
+        return 1;
+    }
+
     // Split the MPI_COMM_WORLD into two groups
     int color = my_rank % 2;
     MPI_Comm_split(MPI_COMM_WORLD, color, my_rank, &comm_num);
     MPI_Comm_split(MPI_COMM_WORLD, color, my_rank, &comm_den);
 
-    int N = count_lines("x.dat");
 
     double *x, *y, *A;
 
@@ -47,7 +58,6 @@ int main(int argc, char **argv)
 
     if (my_rank == 0)
     {
-        printf("Reading data");
         FILE *fx, *fy, *fA;
         fx = fopen("x.dat", "r");
         fy = fopen("y.dat", "r");
@@ -86,7 +96,6 @@ int main(int argc, char **argv)
 
     if (color == 0)
     {
-        printf("Rank %d: local_n = %d\n", my_rank, local_n);
         // compute local_numerator
         for (int i = offset; i < offset + local_n; i++)
         {
@@ -95,18 +104,15 @@ int main(int argc, char **argv)
                 local_numerator += x[i] * A[i * N + j] * y[j];
             }
         }
-        printf("Rank %d: local_numerator = %lf\n", my_rank, local_numerator);
     }
 
     if (color == 1)
     {
-        printf("Rank %d: local_n = %d\n", my_rank, local_n);
         // compute local_denominator
         for (int i = offset; i < offset + local_n; i++)
         {
             local_denominator += x[i] * y[i];
         }
-        printf("Rank %d: local_denominator = %lf\n", my_rank, local_denominator);
     }
 
     MPI_Reduce(&local_numerator, &total_numerator, 1, MPI_DOUBLE, MPI_SUM, 0, comm_num);
@@ -114,15 +120,11 @@ int main(int argc, char **argv)
 
     if (is_root_of_group(my_rank, comm_den) && total_denominator != 0)
     {
-        printf("Rank %d: sending total_denominator = %lf\n", my_rank, total_denominator);
         MPI_Send(&total_denominator, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-        printf("Rank %d: sent total_denominator = %lf\n", my_rank, total_denominator);
     }
 
     if (my_rank == 0)
     {
-        printf("Rank 0: total_numerator = %lf\n", total_numerator);
-        printf("Rank 0: total_denominator = %lf\n", total_denominator);
         MPI_Status status;
         int source_rank;
         // Receive from any source
