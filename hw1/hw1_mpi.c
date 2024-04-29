@@ -143,7 +143,9 @@ int main(int argc, char **argv)
         }
 
         double AVG = total_numerator / total_denominator;
-        printf("AVG = %lf\n", AVG);
+        FILE *f = fopen("avg.txt", "w");
+        fprintf(f, "Rezultatul dvs este: %lf\n", AVG);
+        fclose(f);
     }
 
     free(x);
