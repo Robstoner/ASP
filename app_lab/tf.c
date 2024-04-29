@@ -38,7 +38,7 @@ int main(int argc, char **argv)
         {
             for (int j = 0; j < YSIZE; j++)
             {
-                final_image_array[i * local_xsize + j] = 0.75 * CONTRAST;
+                final_image_array[i * local_ysize + j] = 0.75 * CONTRAST;
             }
         }
     }
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
         {
             for (int j = 0; j < local_ysize; j++)
             {
-                local_image_array[i * local_xsize + j] = 0.75 * CONTRAST;
+                local_image_array[i * local_ysize + j] = 0.75 * CONTRAST;
             }
         }
 
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
             {
                 for (int j = 0; j < local_ysize; ++j)
                 {
-                    local_image_array[i * local_xsize + j] = 0;
+                    local_image_array[i * local_ysize + j] = 0;
                 }
             }
         }
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
             {
                 for (int j = 0; j < local_ysize; ++j)
                 {
-                    local_image_array[i * local_xsize + j] = CONTRAST;
+                    local_image_array[i * local_ysize + j] = CONTRAST;
                 }
             }
         }
