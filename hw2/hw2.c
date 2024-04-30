@@ -21,20 +21,21 @@ int main(int argc, char **argv)
     pold = (float *)malloc((XSIZE + 2) * (YSIZE + 2) * sizeof(float *));
     pnew = (float *)malloc((XSIZE + 2) * (YSIZE + 2) * sizeof(float *));
 
+    for (int i = 0; i < XSIZE + 2; ++i)
+    {
+        for (int j = 0; j < YSIZE + 2; ++j)
+        {
+            plim[i * (YSIZE + 2) + j] = 255.0;
+            pold[i * (YSIZE + 2) + j] = 255.0;
+            pnew[i * (YSIZE + 2) + j] = 255.0;
+        }
+    }
+
     for (int i = 1; i <= XSIZE; ++i)
     {
         for (int j = 1; j <= YSIZE; ++j)
         {
             plim[i * (YSIZE + 2) + j] = data[(i - 1) * YSIZE + (j - 1)];
-        }
-    }
-
-    for (int i = 0; i < XSIZE + 2; ++i)
-    {
-        for (int j = 0; j < YSIZE + 2; ++j)
-        {
-            pold[i * (YSIZE + 2) + j] = 255.0;
-            pnew[i * (YSIZE + 2) + j] = 255.0;
         }
     }
 
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
         }
     }
 
-    pgm_write("output.pgm", data, XSIZE, YSIZE);
+    pgm_write("output_sequential.pgm", data, XSIZE, YSIZE);
 
     return 0;
 }
